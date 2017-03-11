@@ -99,7 +99,12 @@ namespace TodoListAPI
             logger.LogInformation($"Starting application in {env.EnvironmentName} environment");
 
             if (env.IsDevelopment())
-                app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+                app.UseCors(builder =>  {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
 
             app.UseIdentity();
 

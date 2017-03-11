@@ -1,0 +1,5 @@
+{{#if session.isAuthenticated}}
+  <a {{action 'invalidateSession'}}>Logout</a>
+{{else}}
+  {{#link-to 'login'}}Login{{/link-to}}
+{{/if}}

@@ -7,7 +7,10 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('todo-items');
+  this.route('login');
+  this.route('s', function() {
+    this.route('todo-items');
+  });
 });
 
 export default Router;
