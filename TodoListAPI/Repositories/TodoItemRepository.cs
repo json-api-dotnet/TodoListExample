@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using JsonApiDotNetCore.Data;
 using JsonApiDotNetCore.Services;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,12 @@ namespace TodoListAPI.Repositories
         public override IQueryable<TodoItem> Get()
         {
             return base.Get().Where(e => e.OwnerId == _authenticationService.GetUserId());
+        }
+
+        public override async Task<TodoItem> CreateAsync(TodoItem todoItem)
+        {
+            todoItem.OwnerId = _authenticationService.GetUserId();
+            return await base.CreateAsync(todoItem);
         }
     }
 }
