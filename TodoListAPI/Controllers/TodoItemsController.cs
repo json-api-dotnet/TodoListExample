@@ -1,6 +1,5 @@
 using AspNet.Security.OAuth.Validation;
 using JsonApiDotNetCore.Controllers;
-using JsonApiDotNetCore.Data;
 using JsonApiDotNetCore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -13,9 +12,9 @@ namespace TodoListAPI.Controllers
     {
          public TodoItemsController(
             IJsonApiContext jsonApiContext,
-            IEntityRepository<TodoItem> entityRepository,
+            IResourceService<TodoItem> resourceService,
             ILoggerFactory loggerFactory) 
-            : base(jsonApiContext, entityRepository, loggerFactory)
+            : base(jsonApiContext, resourceService, loggerFactory)
         { }
     }
 }

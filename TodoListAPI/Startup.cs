@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TodoListAPI.Data;
 using JsonApiDotNetCore.Extensions;
-using JsonApiDotNetCore.Routing;
 using JsonApiDotNetCore.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using TodoListAPI.Models;
