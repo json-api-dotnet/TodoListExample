@@ -9,22 +9,21 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="JsonApiDotNetCore" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.0" />
+    <PackageReference Include="JsonApiDotNetCore" Version="2.0.2-*" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.2" />
     <PackageReference Include="AspNet.Security.OAuth.Validation" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict.Mvc" Version="1.0.0-*" />
-     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.0" />
+     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
   </ItemGroup>
   
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0-msbuild3-final"/>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1"/>
   </ItemGroup>
   
 </Project>
