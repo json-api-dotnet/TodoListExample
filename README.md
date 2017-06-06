@@ -13,7 +13,7 @@ Demo code for [jsonapi-dotnet-core](https://github.com/Research-Institute/json-a
 
 - `cd TodoListAPI`
 - Run migrations: `dotnet ef database update`
-- Set the environment to development: `SET ASPNETCORE_ENVIRONMENT=development` (mac)
+- Set the environment to development: `export ASPNETCORE_ENVIRONMENT=development` (mac)
 - `dotnet run`
 
 ### Starting the Client

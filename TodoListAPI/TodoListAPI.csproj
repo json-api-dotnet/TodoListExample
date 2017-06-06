@@ -9,7 +9,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="JsonApiDotNetCore" Version="2.0.2-*" />
+    <PackageReference Include="JsonApiDotNetCore" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
