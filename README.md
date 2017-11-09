@@ -1,6 +1,6 @@
 # JsonApiDotNetCore Todo List Example
 
-Demo application for [jsonapi-dotnet-core](https://github.com/json-api-dotnet/JsonApiDotNetCore/).
+Demo application for [JsonApiDotNetCore](https://github.com/json-api-dotnet/JsonApiDotNetCore/).
 
 [![Goto Playlist](https://img.youtube.com/vi/KAMuo6K7VcE/0.jpg)](https://www.youtube.com/watch?v=KAMuo6K7VcE&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf)
 
