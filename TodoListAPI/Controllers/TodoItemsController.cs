@@ -7,14 +7,14 @@ using TodoListAPI.Models;
 
 namespace TodoListAPI.Controllers
 {
-    [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     public class TodoItemsController : JsonApiController<TodoItem>
     {
-         public TodoItemsController(
-            IJsonApiContext jsonApiContext,
-            IResourceService<TodoItem> resourceService,
-            ILoggerFactory loggerFactory) 
-            : base(jsonApiContext, resourceService, loggerFactory)
+        public TodoItemsController(
+           IJsonApiContext jsonApiContext,
+           IResourceService<TodoItem> resourceService,
+           ILoggerFactory loggerFactory)
+           : base(jsonApiContext, resourceService, loggerFactory)
         { }
     }
 }

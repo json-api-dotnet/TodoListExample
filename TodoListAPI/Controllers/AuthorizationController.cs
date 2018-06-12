@@ -11,10 +11,9 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Core;
+using OpenIddict.Abstractions;
 using TodoListAPI.Models;
 
 namespace AuthorizationServer.Controllers
@@ -135,7 +134,7 @@ namespace AuthorizationServer.Controllers
 
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(
-                principal, new AuthenticationProperties(),
+                principal, new Microsoft.AspNetCore.Authentication.AuthenticationProperties(),
                 OpenIdConnectServerDefaults.AuthenticationScheme);
 
             // Set the list of scopes granted to the client application.

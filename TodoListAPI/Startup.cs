@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using TodoListAPI.Data;
 using JsonApiDotNetCore.Extensions;
 using JsonApiDotNetCore.Data;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using TodoListAPI.Models;
 using AspNet.Security.OpenIdConnect.Primitives;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using System;
 using TodoListAPI.Repositories;
 using TodoListAPI.Services;
@@ -44,32 +43,39 @@ namespace TodoListAPI
             {
                 opt.UseNpgsql(GetConnectionString());
                 opt.UseOpenIddict();
-            });
+            }, ServiceLifetime.Transient);
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddOpenIddict(options =>
-            {
-                // Register the Entity Framework stores.
-                options.AddEntityFrameworkCoreStores<AppDbContext>();
+            services.AddOpenIddict()
+                .AddCore(options =>
+                {
+                    // Register the Entity Framework stores.
+                    options.UseEntityFrameworkCore(builder =>
+                    {
+                        builder.UseDbContext<AppDbContext>();
+                    });
+                })
+                .AddServer(options =>
+                {
+                    // Register the ASP.NET Core MVC binder used by OpenIddict.
+                    // Note: if you don't call this method, you won't be able to
+                    // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
+                    options.UseMvc();
 
-                // Register the ASP.NET Core MVC binder used by OpenIddict.
-                // Note: if you don't call this method, you won't be able to
-                // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
-                options.AddMvcBinders();
+                    // Enable the token endpoint (required to use the password flow).
+                    options.EnableTokenEndpoint("/connect/token");
 
-                // Enable the token endpoint (required to use the password flow).
-                options.EnableTokenEndpoint("/connect/token");
+                    // Allow client applications to use the grant_type=password flow.
+                    options.AllowPasswordFlow();
+                    options.AllowRefreshTokenFlow();
 
-                // Allow client applications to use the grant_type=password flow.
-                options.AllowPasswordFlow();
-                options.AllowRefreshTokenFlow();
-
-                // During development, you can disable the HTTPS requirement.
-                options.DisableHttpsRequirement();
-            });
+                    // During development, you can disable the HTTPS requirement.
+                    options.DisableHttpsRequirement();
+                })
+                .AddValidation();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -85,56 +91,57 @@ namespace TodoListAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app,
+        public void Configure(IApplicationBuilder app,
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             AppDbContext context,
             UserManager<ApplicationUser> userManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
             var logger = loggerFactory.CreateLogger<Startup>();
             logger.LogInformation($"Starting application in {env.EnvironmentName} environment");
 
             if (env.IsDevelopment())
-                app.UseCors(builder =>  {
+                app.UseCors(builder =>
+                {
                     builder.WithOrigins("http://localhost:4200")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
                 });
 
-            app.UseIdentity();
-
-            app.UseOAuthValidation();
-
-            app.UseOpenIddict();
+            app.UseAuthentication();
 
             app.UseJsonApi();
 
-            await SeedDatabase(context, userManager);
+            SeedDatabase(context, userManager).Wait();
         }
 
         private async Task SeedDatabase(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
-            if(!await context.Users.AnyAsync())
+            await context.Database.MigrateAsync();
+            var usersExist = await context.Users.AnyAsync();
+            if (usersExist == false)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = "guest",
                     Email = "jaredcnance@gmail.com"
                 };
 
                 var result = await userManager.CreateAsync(user, "Guest1!");
 
-                if(!result.Succeeded) throw new Exception("Could not create default user");
+                if (!result.Succeeded) throw new Exception("Could not create default user");
 
-                context.TodoItems.Add(new TodoItem {
+                context.TodoItems.Add(new TodoItem
+                {
                     Owner = user,
                     Description = "owned"
                 });
 
-                context.TodoItems.Add(new TodoItem {
+                context.TodoItems.Add(new TodoItem
+                {
                     Description = "not owned"
                 });
 

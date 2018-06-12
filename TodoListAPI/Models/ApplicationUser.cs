@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using JsonApiDotNetCore.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace TodoListAPI.Models
 {
@@ -12,7 +12,7 @@ namespace TodoListAPI.Models
 
         [Attr("first-name")]
         public string FirstName { get; set; }
-        
+
         [Attr("last-name")]
         public string LastName { get; set; }
 

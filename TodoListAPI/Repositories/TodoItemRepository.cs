@@ -12,16 +12,15 @@ namespace TodoListAPI.Repositories
     public class TodoItemRepository : DefaultEntityRepository<TodoItem>
     {
         private readonly ILogger _logger;
-        private readonly AppDbContext _context;
         private readonly IAuthenticationService _authenticationService;
 
-        public TodoItemRepository(AppDbContext context,
+        public TodoItemRepository(
+            IDbContextResolver contextResolver,
             ILoggerFactory loggerFactory,
             IJsonApiContext jsonApiContext,
             IAuthenticationService authenticationService)
-        : base(context, loggerFactory, jsonApiContext)
-        { 
-            _context = context;
+        : base(loggerFactory, jsonApiContext, contextResolver)
+        {
             _logger = loggerFactory.CreateLogger<TodoItemRepository>();
             _authenticationService = authenticationService;
         }
