@@ -65,6 +65,8 @@ namespace TodoListAPI
                     // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
                     options.UseMvc();
 
+                    options.AcceptAnonymousClients();
+
                     // Enable the token endpoint (required to use the password flow).
                     options.EnableTokenEndpoint("/connect/token");
 
@@ -120,6 +122,7 @@ namespace TodoListAPI
 
         private async Task SeedDatabase(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
+            await context.Database.EnsureDeletedAsync();
             await context.Database.MigrateAsync();
             var usersExist = await context.Users.AnyAsync();
             if (usersExist == false)
@@ -136,7 +139,7 @@ namespace TodoListAPI
 
                 context.TodoItems.Add(new TodoItem
                 {
-                    Owner = user,
+                    OwnerId = user.Id,
                     Description = "owned"
                 });
 

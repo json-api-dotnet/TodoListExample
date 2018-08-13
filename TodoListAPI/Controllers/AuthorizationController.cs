@@ -18,7 +18,7 @@ using TodoListAPI.Models;
 
 namespace AuthorizationServer.Controllers
 {
-    public class AuthorizationController : Controller
+    public class AuthorizationController : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
