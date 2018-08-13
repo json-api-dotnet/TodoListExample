@@ -9,7 +9,7 @@ using TodoListAPI.Services;
 
 namespace TodoListAPI.Repositories
 {
-    public class TodoItemRepository : DefaultEntityRepository<TodoItem>
+    public class TodoItemRepository : DefaultEntityRepository<TodoItem>, IEntityRepository<TodoItem, int>
     {
         private readonly ILogger _logger;
         private readonly IAuthenticationService _authenticationService;

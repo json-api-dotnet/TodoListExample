@@ -15,6 +15,7 @@ using System;
 using TodoListAPI.Repositories;
 using TodoListAPI.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace TodoListAPI
 {
@@ -37,7 +38,12 @@ namespace TodoListAPI
         {
             // Add framework services.
             services.AddCors();
-            services.AddMvc();
+            var mvcBuilder = services.AddMvcCore();
+
+            services.AddJsonApi(
+                opt => opt.Namespace = "api/v1", 
+                mvcBuilder,
+                discovery => discovery.AddCurrentAssemblyServices());
 
             services.AddDbContext<AppDbContext>(opt =>
             {
@@ -85,11 +91,8 @@ namespace TodoListAPI
                 options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
             });
 
-            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IEntityRepository<TodoItem>, TodoItemRepository>();
-
-            services.AddJsonApi<AppDbContext>(opt => opt.Namespace = "api/v1");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
