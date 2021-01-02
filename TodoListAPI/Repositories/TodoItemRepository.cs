@@ -1,39 +1,40 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using JsonApiDotNetCore.Data;
-using JsonApiDotNetCore.Services;
+using JsonApiDotNetCore.Configuration;
+using JsonApiDotNetCore.Queries;
+using JsonApiDotNetCore.Repositories;
+using JsonApiDotNetCore.Resources;
 using Microsoft.Extensions.Logging;
-using TodoListAPI.Data;
 using TodoListAPI.Models;
 using TodoListAPI.Services;
 
 namespace TodoListAPI.Repositories
 {
-    public class TodoItemRepository : DefaultEntityRepository<TodoItem>, IEntityRepository<TodoItem, int>
+    public class TodoItemRepository : EntityFrameworkCoreRepository<TodoItem>
     {
-        private readonly ILogger _logger;
         private readonly IAuthenticationService _authenticationService;
 
-        public TodoItemRepository(
-            IDbContextResolver contextResolver,
-            ILoggerFactory loggerFactory,
-            IJsonApiContext jsonApiContext,
-            IAuthenticationService authenticationService)
-        : base(loggerFactory, jsonApiContext, contextResolver)
+        public TodoItemRepository(IAuthenticationService authenticationService, ITargetedFields targetedFields,
+            IDbContextResolver contextResolver, IResourceGraph resourceGraph, IResourceFactory resourceFactory,
+            IEnumerable<IQueryConstraintProvider> constraintProviders, ILoggerFactory loggerFactory)
+            : base(targetedFields, contextResolver, resourceGraph, resourceFactory, constraintProviders, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<TodoItemRepository>();
-            _authenticationService = authenticationService;
+            _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
 
-        public override IQueryable<TodoItem> Get()
+        protected override IQueryable<TodoItem> GetAll()
         {
-            return base.Get().Where(e => e.OwnerId == _authenticationService.GetUserId());
+            return base.GetAll().Where(todoItem => todoItem.Owner.Id == _authenticationService.GetUserId());
         }
 
-        public override async Task<TodoItem> CreateAsync(TodoItem todoItem)
+        public override async Task<TodoItem> GetForCreateAsync(int id, CancellationToken cancellationToken)
         {
+            var todoItem = await base.GetForCreateAsync(id, cancellationToken);
             todoItem.OwnerId = _authenticationService.GetUserId();
-            return await base.CreateAsync(todoItem);
+            return todoItem;
         }
     }
 }
