@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using JsonApiDotNetCore.Models;
+using JsonApiDotNetCore.Resources;
+using JsonApiDotNetCore.Resources.Annotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace TodoListAPI.Models
@@ -8,15 +9,15 @@ namespace TodoListAPI.Models
     public class ApplicationUser : IdentityUser, IIdentifiable<string>
     {
         [NotMapped]
-        public string StringId { get => this.Id; set => Id = value; }
+        public string StringId { get => Id; set => Id = value; }
 
-        [Attr("first-name")]
+        [Attr]
         public string FirstName { get; set; }
 
-        [Attr("last-name")]
+        [Attr]
         public string LastName { get; set; }
 
-        [HasMany("todo-items")]
-        public virtual List<TodoItem> TodoItems { get; set; }
+        [HasMany]
+        public virtual ISet<TodoItem> TodoItems { get; set; }
     }
 }

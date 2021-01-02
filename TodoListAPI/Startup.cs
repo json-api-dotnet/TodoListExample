@@ -1,55 +1,54 @@
+using System;
+using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Primitives;
+using JsonApiDotNetCore.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using TodoListAPI.Data;
-using JsonApiDotNetCore.Extensions;
-using JsonApiDotNetCore.Data;
-using Microsoft.AspNetCore.Identity;
 using TodoListAPI.Models;
-using AspNet.Security.OpenIdConnect.Primitives;
-using System.Threading.Tasks;
-using System;
-using TodoListAPI.Repositories;
 using TodoListAPI.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace TodoListAPI
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
+        private readonly string _connectionString;
 
-        public IConfigurationRoot Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            _connectionString = configuration["Data:DefaultConnection"];
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddCors();
-            var mvcBuilder = services.AddMvcCore();
 
             services.AddJsonApi(
-                opt => opt.Namespace = "api/v1", 
-                mvcBuilder,
-                discovery => discovery.AddCurrentAssemblyServices());
+                options =>
+                {
+                    options.Namespace = "api/v1";
+                    options.IncludeExceptionStackTraceInErrors = true;
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new KebabCaseNamingStrategy()
+                    };
+                }, 
+                discovery => discovery.AddCurrentAssembly());
 
-            services.AddDbContext<AppDbContext>(opt =>
+            services.AddDbContext<AppDbContext>(options =>
             {
-                opt.UseNpgsql(GetConnectionString());
-                opt.UseOpenIddict();
-            }, ServiceLifetime.Transient);
+                options.UseNpgsql(_connectionString);
+                options.UseOpenIddict();
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -91,73 +90,73 @@ namespace TodoListAPI
                 options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
             });
 
-            services.TryAddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             ILoggerFactory loggerFactory,
             AppDbContext context,
             UserManager<ApplicationUser> userManager)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-
             var logger = loggerFactory.CreateLogger<Startup>();
             logger.LogInformation($"Starting application in {env.EnvironmentName} environment");
 
             if (env.IsDevelopment())
+            {
                 app.UseCors(builder =>
                 {
                     builder.WithOrigins("http://localhost:4200")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
+            }
+
+            app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseJsonApi();
 
-            SeedDatabase(context, userManager).Wait();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            SeedDatabaseAsync(context, userManager).Wait();
         }
 
-        private async Task SeedDatabase(AppDbContext context, UserManager<ApplicationUser> userManager)
+        private async Task SeedDatabaseAsync(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             await context.Database.EnsureDeletedAsync();
             await context.Database.MigrateAsync();
-            var usersExist = await context.Users.AnyAsync();
-            if (usersExist == false)
+
+            var user = new ApplicationUser
             {
-                var user = new ApplicationUser
-                {
-                    UserName = "guest",
-                    Email = "jaredcnance@gmail.com"
-                };
+                UserName = "guest",
+                Email = "jaredcnance@gmail.com"
+            };
 
-                var result = await userManager.CreateAsync(user, "Guest1!");
-
-                if (!result.Succeeded) throw new Exception("Could not create default user");
-
-                context.TodoItems.Add(new TodoItem
-                {
-                    OwnerId = user.Id,
-                    Description = "owned"
-                });
-
-                context.TodoItems.Add(new TodoItem
-                {
-                    Description = "not owned"
-                });
-
-                context.SaveChanges();
+            var result = await userManager.CreateAsync(user, "Guest1!");
+            if (!result.Succeeded)
+            {
+                throw new Exception("Could not create default user.");
             }
-        }
 
-        private string GetConnectionString()
-        {
-            return Configuration["ConnectionString"];
+            context.TodoItems.Add(new TodoItem
+            {
+                OwnerId = user.Id,
+                Description = "owned"
+            });
+
+            context.TodoItems.Add(new TodoItem
+            {
+                Description = "not owned"
+            });
+
+            await context.SaveChangesAsync();
         }
     }
 }
