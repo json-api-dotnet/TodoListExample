@@ -11,6 +11,9 @@ namespace TodoListAPI.Models
         [NotMapped]
         public string StringId { get => Id; set => Id = value; }
 
+        [NotMapped]
+        public string LocalId { get; set; }
+
         [Attr]
         public string FirstName { get; set; }
 
