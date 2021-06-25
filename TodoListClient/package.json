@@ -45,12 +45,12 @@
     "ember-fetch": "^8.0.4",
     "ember-load-initializers": "^2.1.2",
     "ember-maybe-import-regenerator": "^0.1.6",
-    "ember-notify": "5.2.1",
+    "ember-notify": "^6.0.1",
     "ember-page-title": "^6.2.1",
     "ember-qunit": "^5.1.4",
     "ember-resolver": "^8.0.2",
     "ember-route-action-helper": "2.0.6",
-    "ember-simple-auth": "1.2.0",
+    "ember-simple-auth": "^3.1.0",
     "ember-source": "~3.26.1",
     "ember-template-lint": "^3.2.0",
     "ember-welcome-page": "^4.0.0",
@@ -70,5 +70,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "ember-cli-shims": "^1.2.0"
   }
 }
