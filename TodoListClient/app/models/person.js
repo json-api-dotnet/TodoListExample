@@ -1,8 +1,6 @@
-import DS from 'ember-data';
+import Model, { hasMany, attr } from '@ember-data/model';
 
-const { attr, hasMany } = DS;
-
-export default DS.Model.extend({
+export default Model.extend({
 
   firstName: attr('string'),
   lastName: attr('string'),

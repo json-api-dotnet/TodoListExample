@@ -1,27 +1,29 @@
-/* jshint node: true */
+'use strict';
 
-module.exports = function(environment) {
-  var ENV = {
+module.exports = function (environment) {
+  let ENV = {
     modulePrefix: 'todo-list-client',
-    environment: environment,
+    environment,
     rootURL: '/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
+      // Here you can pass flags/options to your application instance
+      // when it is created
       host: 'http://localhost:5000',
       namespace: 'api/v1',
       tokenPath: 'connect/token'
-    }
+    },
   };
 
   if (environment === 'development') {
@@ -41,10 +43,11 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {
-
+    // here you can enable a production-specific feature
   }
 
   return ENV;

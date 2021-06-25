@@ -1,17 +1,16 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 
-const { service } = Ember.inject;
-
-export default Ember.Component.extend({
+export default Component.extend({
 
   session: service(),
   notify: service(),
 
   actions: {
     authenticate() {
-      let { identification, password } = this.getProperties('identification', 'password');
-      this.get('session').authenticate('authenticator:oauth2', identification, password).catch(() => {
-        this.get('notify').error('Authentication failed');
+      let { identification, password } = this;
+      this.session.authenticate('authenticator:oauth2', identification, password).catch(() => {
+        this.notify.error('Authentication failed');
       });
     }
   },
