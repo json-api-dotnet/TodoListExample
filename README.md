@@ -1,8 +1,13 @@
 # JsonApiDotNetCore Todo List Example
 
-Demo application for [JsonApiDotNetCore](https://github.com/json-api-dotnet/JsonApiDotNetCore/).
+Demo application for [JsonApiDotNetCore](https://github.com/json-api-dotnet/JsonApiDotNetCore/) using [Ember.js](https://emberjs.com/).
 
-[![Goto Playlist](https://img.youtube.com/vi/KAMuo6K7VcE/0.jpg)](https://www.youtube.com/watch?v=KAMuo6K7VcE&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf)
+Back in 2017, Jared Nance did an excellent [video series](https://www.youtube.com/watch?v=KAMuo6K7VcE&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf) in which he built this demo:
+- [Part 1: Server Setup](https://www.youtube.com/watch?v=KAMuo6K7VcE&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf)
+- [Part 2: Client Setup](https://www.youtube.com/watch?v=_d53rG2i9pY&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=2)
+- [Part 3: Server Authentication and Authorization](https://www.youtube.com/watch?v=GIQqIz1Gpvo&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=4)
+- [Part 4: Client Sessions](https://www.youtube.com/watch?v=CHdoya6rvaA&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=6)
+- [Part 5: Persisting Data](https://www.youtube.com/watch?v=bZ1D_aYGJnU&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=7)
 
 ## Usage
 
@@ -22,13 +27,25 @@ docker run --name TodoListSampleDb \
 
 ### Starting the API
 
-
 - `cd TodoListAPI`
-- Run migrations: `dotnet ef database update`
 - Set the environment to development: `export ASPNETCORE_ENVIRONMENT=development` (mac)
 - `dotnet run`
 
 ### Starting the Client
 
-- Install packges: `yarn`
-- `ember s`
+- Install ember-cli:
+    `npm install -g ember-cli`
+
+- Install packages:
+    `npm install -g yarn`
+    `yarn install`
+
+- `ember s` or `yarn start`
+
+- Updating to the latest version of Ember:
+    `npm install -g ember-cli-update`
+    `ember-cli-update`
+    `ember-cli-update --run-codemods`
+    `yarn install`
+
+In case you haven't watched the videos: the default username/password is `guest`/`Guest1!`.

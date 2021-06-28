@@ -1,10 +1,10 @@
-import Ember from 'ember';
-import config from './config/environment';
+import EmberRouter from '@ember/routing/router';
+import config from 'todo-list-client/config/environment';
 
-const Router = Ember.Router.extend({
-  location: config.locationType,
-  rootURL: config.rootURL
-});
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
 
 Router.map(function() {
   this.route('login');
@@ -14,5 +14,3 @@ Router.map(function() {
     });
   });
 });
-
-export default Router;

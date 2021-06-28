@@ -1,10 +1,9 @@
-import Ember from 'ember';
-import DS from 'ember-data';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import ENV from 'todo-list-client/config/environment';
 
-const { computed, inject: { service } } = Ember;
-
-export default DS.JSONAPIAdapter.extend({
+export default JSONAPIAdapter.extend({
   session: service(),
 
   namespace: ENV.APP.namespace,

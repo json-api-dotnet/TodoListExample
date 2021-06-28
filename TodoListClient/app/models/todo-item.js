@@ -1,7 +1,6 @@
-import DS from 'ember-data';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { validator, buildValidations } from 'ember-cp-validations';
 
-const { attr, belongsTo } = DS;
 const Validations = buildValidations({
   description: [
     validator('presence', true),
@@ -11,7 +10,7 @@ const Validations = buildValidations({
   ]
 });
 
-export default DS.Model.extend(Validations, {
+export default Model.extend(Validations, {
 
   description: attr('string'),
   owner: belongsTo('person')
