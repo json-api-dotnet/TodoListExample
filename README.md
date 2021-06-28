@@ -27,25 +27,36 @@ docker run --name TodoListSampleDb \
 
 ### Starting the API
 
-- `cd TodoListAPI`
-- Set the environment to development: `export ASPNETCORE_ENVIRONMENT=development` (mac)
-- `dotnet run`
+- Switch directory
+  - `cd TodoListAPI`
+- Set the environment to development (mac)
+  - `export ASPNETCORE_ENVIRONMENT=development`
+- Start the server
+  - `dotnet run`
 
 ### Starting the Client
 
-- Install ember-cli:
-    `npm install -g ember-cli`
+- Switch directory
+  - `cd TodoListClient`
 
-- Install packages:
-    `npm install -g yarn`
-    `yarn install`
+- Install ember-cli
+  - `npm install -g ember-cli`
 
-- `ember s` or `yarn start`
+- Restore packages
+  - `npm install -g yarn`
+  - `yarn install`
 
-- Updating to the latest version of Ember:
-    `npm install -g ember-cli-update`
-    `ember-cli-update`
-    `ember-cli-update --run-codemods`
-    `yarn install`
+- Start the client
+  - `yarn start`
+  or
+  - `ember s` 
+  
+- Open http://localhost:4200/ in your browser
 
 In case you haven't watched the videos: the default username/password is `guest`/`Guest1!`.
+
+## Updating to the latest version of Ember
+- `npm install -g ember-cli-update`
+- `ember-cli-update`
+- `ember-cli-update --run-codemods`
+- `yarn install`
