@@ -56,7 +56,18 @@ docker run --name TodoListSampleDb \
 In case you haven't watched the videos: the default username/password is `guest`/`Guest1!`.
 
 ## Updating to the latest version of Ember
+
+Usually the following commands are sufficient
 - `npm install -g ember-cli-update`
 - `ember-cli-update`
 - `ember-cli-update --run-codemods`
 - `yarn install`
+
+### Testing if everything still works
+- application starts and displays login link
+- login with invalid username/password shows popup
+- login with correct username/password shows single todo-item "owned"
+- input validation: adding a todo-item with less than 4 characters is not possible
+- after adding a todo-item, you're taken back to the list, which includes the new item
+- clicking logout takes you back to the login page
+- navigating to http://localhost:4200/s/todo-items when logged out takes you to the login page
