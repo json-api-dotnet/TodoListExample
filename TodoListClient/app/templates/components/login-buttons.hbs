@@ -1,4 +1,4 @@
-{{#if session.isAuthenticated}}
+{{#if this.session.isAuthenticated}}
   <a {{action 'invalidateSession'}}>Logout</a>
 {{else}}
   <LinkTo @route="login">Login</LinkTo>

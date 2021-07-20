@@ -1,14 +1,12 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default Component.extend({
+export default class LoginForm extends Component {
+  @service session;
 
-  session: service(),
-
-  actions: {
-    invalidateSession() {
-      this.session.invalidate();
-    }
-  },
-
-});
+  @action
+  invalidateSession() {
+    this.session.invalidate();
+  }
+}

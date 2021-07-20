@@ -1,5 +1,5 @@
 <LinkTo @route="s.todo-items.add">Add</LinkTo>
 <br />
-{{#each model as |todoItem|}}
+{{#each this.model as |todoItem|}}
   {{todoItem.description}} <br />
 {{/each}}

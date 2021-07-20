@@ -11,8 +11,6 @@ const Validations = buildValidations({
 });
 
 export default Model.extend(Validations, {
-
   description: attr('string'),
   owner: belongsTo('person')
-
 });

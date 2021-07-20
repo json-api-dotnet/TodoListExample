@@ -1,19 +1,10 @@
 import Route from '@ember/routing/route';
-import DataRoute from 'ember-data-route';
+import { inject as service } from '@ember/service';
 
-export default Route.extend(DataRoute, {
+export default class IndexRoute extends Route {
+  @service store;
+
   model() {
     return this.store.createRecord('todo-item');
-  },
-
-  actions: {
-    save() {
-      this.get('controller.model')
-        .save()
-        .then(() => {
-          this.transitionTo('s.todo-items');
-        });
-    }
-  },
-
-});
+  }
+}
