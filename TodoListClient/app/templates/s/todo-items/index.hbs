@@ -1,5 +1,18 @@
-<LinkTo @route="s.todo-items.add">Add</LinkTo>
-<br />
-{{#each this.model as |todoItem|}}
-  {{todoItem.description}} <br />
-{{/each}}
+<h1>Todo Items</h1>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th class="text-end">
+        <LinkTo @route="s.todo-items.add" class="btn btn-primary">Add Todo Item</LinkTo>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model as |todoItem|}}
+    <tr>
+      <td colspan="2">{{todoItem.description}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

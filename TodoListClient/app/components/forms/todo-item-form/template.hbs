@@ -1,9 +1,8 @@
-{{#each this.changeset.errors as |error|}}
-{{error.validation}}
-{{/each}}
+<h1>New Todo Item</h1>
 <form {{on "submit" this.save}}>
-  <label for="description">Description</label>
-  <Input id="description" placeholder="description" @value={{@todoItem.description}} />
-  <br />
-  <button type="submit">Add</button>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <Input id="description" class="form-control" placeholder="description" @value={{@todoItem.description}} />
+  </div>
+  <button class="btn btn-primary" type="submit">Add Todo Item</button>
 </form>

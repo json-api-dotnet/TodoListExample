@@ -31,9 +31,11 @@ export default class TodoItemForm extends Component {
       if (this.changeset.isValid) {
         await this.changeset.save();
         this.router.transitionTo('s.todo-items');
+      } else {
+        const errors = this.changeset.errors.map(error => `${error.validation} <br />`).reduce((accumulator, currentValue) => accumulator + currentValue);
+        this.notify.error({ html: errors });
       }
     } catch (error) {
-      console.log(error);
       this.notify.error('Failed to create item');
     }
   }
