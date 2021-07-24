@@ -12,7 +12,7 @@ export default class TodoItemForm extends Component {
     try {
       await todoItem.save();
       this.router.transitionTo('s.todo-items');
-    } catch(error) {
+    } catch (error) {
       this.notify.error('Failed to create item');
     }
   }

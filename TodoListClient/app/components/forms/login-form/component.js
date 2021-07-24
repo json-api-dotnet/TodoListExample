@@ -15,9 +15,13 @@ export default class LoginForm extends Component {
   async authenticate(event) {
     event.preventDefault();
     try {
-      await this.session.authenticate('authenticator:oauth2', this.identification, this.password);
+      await this.session.authenticate(
+        'authenticator:oauth2',
+        this.identification,
+        this.password
+      );
       this.router.transitionTo('s.todo-items');
-    } catch(error) {
+    } catch (error) {
       this.notify.error('Authentication failed');
     }
   }

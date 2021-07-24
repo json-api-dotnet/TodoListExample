@@ -1,5 +1,6 @@
 <form {{on "submit" (fn this.save @todoItem)}}>
-  <Input placeholder="description" @value={{@todoItem.description}} />
+  <label for="description">Description</label>
+  <Input id="description" placeholder="description" @value={{@todoItem.description}} />
   <br />
   {{#if @todoItem.validations.isValid}}
     <button type="submit">Add</button>

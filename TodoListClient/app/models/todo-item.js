@@ -5,12 +5,12 @@ const Validations = buildValidations({
   description: [
     validator('presence', true),
     validator('length', {
-      min: 4
-    })
-  ]
+      min: 4,
+    }),
+  ],
 });
 
 export default Model.extend(Validations, {
   description: attr('string'),
-  owner: belongsTo('person')
+  owner: belongsTo('person'),
 });

@@ -22,7 +22,7 @@ module.exports = function (environment) {
       // when it is created
       host: 'http://localhost:5000',
       namespace: 'api/v1',
-      tokenPath: 'connect/token'
+      tokenPath: 'connect/token',
     },
   };
 
