@@ -1,10 +1,9 @@
-<form {{on "submit" (fn this.save @todoItem)}}>
+{{#each this.changeset.errors as |error|}}
+{{error.validation}}
+{{/each}}
+<form {{on "submit" this.save}}>
   <label for="description">Description</label>
   <Input id="description" placeholder="description" @value={{@todoItem.description}} />
   <br />
-  {{#if @todoItem.validations.isValid}}
-    <button type="submit">Add</button>
-  {{else}}
-    <button type="submit" disabled>Add</button>
-  {{/if}}
+  <button type="submit">Add</button>
 </form>
