@@ -1,7 +1,17 @@
-<form {{action 'authenticate' on='submit' }}>
-  <label for="identification">Login</label>
-  {{input id='identification' placeholder='Enter Login' value=identification}}
-  <label for="password">Password</label>
-  {{input id='password' placeholder='Enter Password' type='password' value=password}}
-  <button type="submit">Login</button>
-</form>
+<main class="form-signin text-center">
+  <form {{on 'submit' this.authenticate }}>
+    <img class="mb-4" src="assets/images/logo.png" alt="" role="presentation" width="108" height="108">
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <div class="form-floating">
+      <Input id="identification" @type="text" class="form-control" placeholder="Enter Login"
+        @value={{this.identification}} autocomplete="username" />
+      <label for="identification">Login</label>
+    </div>
+    <div class="form-floating mb-3">
+      <Input id="password" @type="password" class="form-control" placeholder="Enter Password" @value={{this.password}}
+        autocomplete="current-password" />
+      <label for="password">Password</label>
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
+  </form>
+</main>

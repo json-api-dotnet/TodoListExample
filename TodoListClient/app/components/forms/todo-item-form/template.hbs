@@ -1,9 +1,8 @@
-<form {{action "save" on="submit"}}>
-  {{input placeholder="description" value=todoItem.description}}
-  <br />
-  {{#if todoItem.validations.isValid}}
-    <button type="submit">Add</button>
-  {{else}}
-    <button type="submit" disabled>Add</button>
-  {{/if}}
+<h1>New Todo Item</h1>
+<form {{on "submit" this.save}}>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <Input id="description" class="form-control" placeholder="description" @value={{@todoItem.description}} />
+  </div>
+  <button class="btn btn-primary" type="submit">Add Todo Item</button>
 </form>

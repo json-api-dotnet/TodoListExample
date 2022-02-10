@@ -1,9 +1,11 @@
 import Route from '@ember/routing/route';
-import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+import { inject as service } from '@ember/service';
 
-export default Route.extend(ApplicationRouteMixin, {
-  sessionAuthenticated() {
-    this._super(...arguments);
-    this.transitionTo('s.todo-items');
+export default class ApplicationRoute extends Route {
+  @service session;
+  @service router;
+
+  beforeModel() {
+    this.router.transitionTo('s.todo-items');
   }
-});
+}
