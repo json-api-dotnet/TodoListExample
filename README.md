@@ -66,7 +66,7 @@ Usually the following commands are sufficient
 ### Testing if everything still works
 - application starts and displays login link
 - login with invalid username/password shows popup
-- login with correct username/password shows single todo-item "owned"
+- login with correct username/password shows single todo-item "owned-by-guest"
 - input validation: adding a todo-item with less than 4 characters is not possible
 - after adding a todo-item, you're taken back to the list, which includes the new item
 - clicking logout takes you back to the login page

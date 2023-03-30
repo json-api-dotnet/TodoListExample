@@ -1,20 +1,9 @@
-using AspNet.Security.OAuth.Validation;
-using JsonApiDotNetCore.Configuration;
-using JsonApiDotNetCore.Controllers;
-using JsonApiDotNetCore.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using TodoListAPI.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using OpenIddict.Validation.AspNetCore;
 
-namespace TodoListAPI.Controllers
+namespace TodoListAPI.Controllers;
+
+[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
+public partial class TodoItemsController
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-    public class TodoItemsController : JsonApiController<TodoItem>
-    {
-        public TodoItemsController(IJsonApiOptions options, ILoggerFactory loggerFactory,
-            IResourceService<TodoItem> resourceService)
-            : base(options, loggerFactory, resourceService)
-        {
-        }
-    }
 }
