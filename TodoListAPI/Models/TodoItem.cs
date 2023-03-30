@@ -1,16 +1,14 @@
-using JsonApiDotNetCore.Resources;
+﻿using JsonApiDotNetCore.Resources;
 using JsonApiDotNetCore.Resources.Annotations;
 
-namespace TodoListAPI.Models
+namespace TodoListAPI.Models;
+
+[Resource]
+public sealed class TodoItem : Identifiable<long>
 {
-    public class TodoItem : Identifiable
-    {
-        [Attr]
-        public string Description { get; set; }
+    [Attr]
+    public string Description { get; set; } = null!;
 
-        public string OwnerId { get; set; }
-
-        [HasOne]
-        public virtual ApplicationUser Owner { get; set; }
-    }
+    [HasOne]
+    public ApplicationUser Owner { get; set; } = null!;
 }
