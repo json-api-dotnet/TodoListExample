@@ -72,7 +72,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    "ember-cli-shims": "^1.2.0",
     "webpack": "^5.81.0"
   }
 }
