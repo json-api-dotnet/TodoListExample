@@ -5,7 +5,8 @@ export default class ApplicationRoute extends Route {
   @service session;
   @service router;
 
-  beforeModel() {
+  async beforeModel() {
+    await this.session.setup();
     this.router.transitionTo('s.todo-items');
   }
 }
