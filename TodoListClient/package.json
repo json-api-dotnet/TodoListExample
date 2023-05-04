@@ -25,6 +25,7 @@
     "test:ember": "ember test"
   },
   "devDependencies": {
+    "@babel/core": "^7.21.8",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@ember/optional-features": "^2.0.0",
@@ -32,6 +33,7 @@
     "@ember/test-helpers": "2.9.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.0.0",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.0.1",
@@ -74,7 +76,7 @@
     "stylelint-config-standard": "^32.0.0",
     "stylelint-prettier": "^3.0.0",
     "tracked-built-ins": "^3.1.1",
-    "webpack": "^5.78.0"
+    "webpack": "^5.82.0"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
@@ -82,7 +84,5 @@
   "ember": {
     "edition": "octane"
   },
-  "dependencies": {
-    "webpack": "^5.81.0"
-  }
+  "dependencies": {}
 }
