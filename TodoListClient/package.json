@@ -45,6 +45,7 @@
     "ember-cli-dependency-checker": "3.3.1",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
+    "ember-cli-mirage": "3.0.0-alpha.3",
     "ember-cli-sass": "11.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
@@ -59,6 +60,7 @@
     "ember-simple-auth": "5.0.0",
     "ember-source": "~4.12.0",
     "ember-template-lint": "5.7.3",
+    "ember-test-selectors": "^6.0.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-ember": "^11.5.0",
@@ -74,7 +76,7 @@
     "stylelint-config-standard": "^32.0.0",
     "stylelint-prettier": "^3.0.0",
     "tracked-built-ins": "^3.1.1",
-    "webpack": "^5.78.0"
+    "webpack": "^5.82.0"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
@@ -82,7 +84,5 @@
   "ember": {
     "edition": "octane"
   },
-  "dependencies": {
-    "webpack": "^5.81.0"
-  }
+  "dependencies": {}
 }
