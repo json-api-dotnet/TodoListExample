@@ -1,5 +1,3 @@
-import { Model, belongsTo } from 'miragejs';
+import { Model } from 'miragejs';
 
-export default Model.extend({
-  owner: belongsTo('person'),
-});
+export default Model.extend();

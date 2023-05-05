@@ -55,6 +55,11 @@ docker run --name TodoListSampleDb \
 
 In case you haven't watched the videos: the default username/password is `guest`/`Guest1!`.
 
+## Running Client Tests
+
+* `ember test`
+* `ember test --server`
+
 ## Updating to the latest version of Ember
 
 Usually the following commands are sufficient

@@ -1,6 +1,13 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { currentURL, click, fillIn, visit } from '@ember/test-helpers';
+import {
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+  visit,
+} from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import {
   authenticateSession,
@@ -13,6 +20,8 @@ module('Acceptance | Login', (hooks) => {
 
   test('redirects to index if authenticated', async function (assert) {
     assert.expect(1);
+
+    this.server.createList('todo-item', 5);
 
     await authenticateSession();
     await visit('/login');
@@ -50,5 +59,32 @@ module('Acceptance | Login', (hooks) => {
     await click('[data-test-submit]');
 
     assert.strictEqual(currentURL(), '/s/todo-items', 'redirects after save');
+  });
+
+  test('errors with invalid login creds', async function (assert) {
+    assert.expect(3);
+
+    await invalidateSession();
+    await visit('/login');
+
+    assert.strictEqual(currentURL(), '/login', 'the route is correct');
+
+    this.server.post('/connect/token', () => {
+      return { errors: 'invalid' };
+    });
+
+    await fillIn('[data-test-username]', 'wrong');
+    await fillIn('[data-test-password]', 'creds');
+    click('[data-test-submit]');
+
+    await waitFor('.message', { timeout: 2000 }).then(() => {
+      assert.strictEqual(
+        find('.message').textContent,
+        'Authentication failed',
+        'error message is displayed'
+      );
+    });
+
+    assert.strictEqual(currentURL(), '/login', 'does not redirect');
   });
 });

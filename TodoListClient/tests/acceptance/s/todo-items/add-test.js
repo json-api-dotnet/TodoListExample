@@ -1,6 +1,13 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import { currentURL, click, fillIn, visit } from '@ember/test-helpers';
+import {
+  currentURL,
+  click,
+  find,
+  fillIn,
+  waitFor,
+  visit,
+} from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import {
   authenticateSession,
@@ -21,7 +28,7 @@ module('Acceptance | S | Todo Items | Add', (hooks) => {
   });
 
   test('can submit valid jsonapi request', async function (assert) {
-    assert.expect(4);
+    assert.expect(3);
 
     await authenticateSession();
     await visit('/s/todo-items');
@@ -49,18 +56,66 @@ module('Acceptance | S | Todo Items | Add', (hooks) => {
       return todoItems.create();
     });
 
-    await fillIn('[data-test-description-input]', '123');
+    await fillIn('[data-test-description-input]', 'FooBar');
     await click('[data-test-submit]');
+
+    assert.strictEqual(currentURL(), '/s/todo-items', 'redirects after save');
+  });
+
+  test('empty descriptions will error', async function (assert) {
+    assert.expect(2);
+
+    await authenticateSession();
+    await visit('/s/todo-items');
+    await click('[data-test-add]');
+
+    this.server.post('/api/v1/todo-items', () => {
+      assert.step('should not run');
+    });
+
+    click('[data-test-submit]');
+
+    await waitFor('.message', { timeout: 2000 }).then(() => {
+      assert.strictEqual(
+        find('.message').textContent,
+        "Description can't be blank ",
+        'error message is displayed'
+      );
+    });
 
     assert.strictEqual(
       currentURL(),
       '/s/todo-items/add',
       'stays on route after failed save'
     );
+  });
 
-    await fillIn('[data-test-description-input]', 'FooBar');
-    await click('[data-test-submit]');
+  test('short descriptions will error', async function (assert) {
+    assert.expect(2);
 
-    assert.strictEqual(currentURL(), '/s/todo-items', 'redirects after save');
+    await authenticateSession();
+    await visit('/s/todo-items');
+    await click('[data-test-add]');
+
+    this.server.post('/api/v1/todo-items', () => {
+      assert.step('should not run');
+    });
+
+    await fillIn('[data-test-description-input]', '123');
+    click('[data-test-submit]');
+
+    await waitFor('.message', { timeout: 2000 }).then(() => {
+      assert.strictEqual(
+        find('.message').textContent,
+        'Description is too short (minimum is 4 characters) ',
+        'error message is displayed'
+      );
+    });
+
+    assert.strictEqual(
+      currentURL(),
+      '/s/todo-items/add',
+      'stays on route after failed save'
+    );
   });
 });
