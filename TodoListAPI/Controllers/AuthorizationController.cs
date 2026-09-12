@@ -38,6 +38,17 @@ public sealed class AuthorizationController : Controller
         {
             if (request.IsPasswordGrantType())
             {
+                if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+                {
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+
                 ApplicationUser? user = await _userManager.FindByNameAsync(request.Username);
 
                 if (user == null)
@@ -52,7 +63,7 @@ public sealed class AuthorizationController : Controller
                 }
 
                 // Validate the username/password parameters and ensure the account is not locked out.
-                SignInResult? result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+                SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
                 if (!result.Succeeded)
                 {
@@ -98,8 +109,20 @@ public sealed class AuthorizationController : Controller
                 // Retrieve the claims principal stored in the refresh token.
                 AuthenticateResult result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
+                string? subject = result.Principal?.GetClaim(Claims.Subject);
+                if (subject == null)
+                {
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The refresh token is no longer valid."
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+
                 // Retrieve the user profile corresponding to the refresh token.
-                ApplicationUser? user = await _userManager.FindByIdAsync(result.Principal!.GetClaim(Claims.Subject));
+                ApplicationUser? user = await _userManager.FindByIdAsync(subject);
 
                 if (user == null)
                 {

@@ -32,7 +32,13 @@ public sealed class TodoItemDefinition : JsonApiResourceDefinition<TodoItem, lon
 
     private async Task<ApplicationUser> GetCurrentUserAsync()
     {
-        ApplicationUser? user = await _userManager.FindByIdAsync(_httpContextAccessor.HttpContext?.User.GetClaim(OpenIddictConstants.Claims.Subject));
+        string? userId = _httpContextAccessor.HttpContext?.User.GetClaim(OpenIddictConstants.Claims.Subject);
+        if (userId == null)
+        {
+            throw new InvalidOperationException("Could not find current user.");
+        }
+
+        ApplicationUser? user = await _userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
