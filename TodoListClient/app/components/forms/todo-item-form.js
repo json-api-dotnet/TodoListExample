@@ -7,6 +7,11 @@ export default class TodoItemForm extends Component {
   @service router;
 
   @action
+  updateDescription(event) {
+    this.args.changeset.set('description', event.target.value);
+  }
+
+  @action
   async save(event) {
     event.preventDefault();
     try {

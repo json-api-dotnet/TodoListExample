@@ -2,7 +2,14 @@
 <form {{on "submit" this.save}}>
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <Input data-test-description-input id="description" class="form-control" placeholder="description" @value={{@todoItem.description}} />
+    <input
+      data-test-description-input
+      id="description"
+      class="form-control"
+      placeholder="description"
+      value={{@changeset.description}}
+      {{on "input" this.updateDescription}}
+    />
   </div>
   <button data-test-submit class="btn btn-primary" type="submit">Add Todo Item</button>
 </form>

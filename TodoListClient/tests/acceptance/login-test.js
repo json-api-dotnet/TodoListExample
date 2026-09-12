@@ -81,7 +81,7 @@ module('Acceptance | Login', (hooks) => {
       assert.strictEqual(
         find('.message').textContent,
         'Authentication failed',
-        'error message is displayed'
+        'error message is displayed',
       );
     });
 

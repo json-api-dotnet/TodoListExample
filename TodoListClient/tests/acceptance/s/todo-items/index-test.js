@@ -35,7 +35,7 @@ module('Acceptance | S | Todo Items | Index', (hooks) => {
   });
 
   test("shows list of user's todo items", async function (assert) {
-    assert.expect(9);
+    assert.expect(8);
 
     const items = this.server.createList('todo-item', 5);
 
@@ -55,7 +55,7 @@ module('Acceptance | S | Todo Items | Index', (hooks) => {
     assert.strictEqual(
       itemRows.length,
       items.length,
-      'All items are displayed'
+      'All items are displayed',
     );
 
     itemRows.forEach((row, index) => {
@@ -64,7 +64,7 @@ module('Acceptance | S | Todo Items | Index', (hooks) => {
       assert.strictEqual(
         row.querySelector('[data-test-description]').textContent,
         item.description,
-        'Description is displayed for each item'
+        'Description is displayed for each item',
       );
     });
 

@@ -12,13 +12,23 @@ export default class LoginForm extends Component {
   @tracked password;
 
   @action
+  updateIdentification(event) {
+    this.identification = event.target.value;
+  }
+
+  @action
+  updatePassword(event) {
+    this.password = event.target.value;
+  }
+
+  @action
   async authenticate(event) {
     event.preventDefault();
     try {
       await this.session.authenticate(
         'authenticator:oauth2',
         this.identification,
-        this.password
+        this.password,
       );
       this.router.transitionTo('s.todo-items');
     } catch (error) {

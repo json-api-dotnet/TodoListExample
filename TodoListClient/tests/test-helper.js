@@ -7,6 +7,8 @@ import { start } from 'ember-qunit';
 
 setApplication(Application.create(config.APP));
 
+QUnit.config.countStepsAsOne = true;
+
 setup(QUnit.assert);
 
 start();
