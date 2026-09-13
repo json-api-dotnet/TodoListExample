@@ -1,4 +1,4 @@
-using JorgeSerrano.Json;
+using System.Text.Json;
 using JsonApiDotNetCore.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +36,7 @@ builder.Services.AddJsonApi<AppDbContext>(options =>
     options.Namespace = "api/v1";
     options.UseRelativeLinks = true;
     options.IncludeTotalResourceCount = true;
-    options.SerializerOptions.PropertyNamingPolicy = new JsonKebabCaseNamingPolicy();
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
 
 #if DEBUG
     options.SerializerOptions.WriteIndented = true;

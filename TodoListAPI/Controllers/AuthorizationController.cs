@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -16,17 +15,9 @@ namespace TodoListAPI.Controllers;
 // Based on the samples at:
 // - https://github.com/openiddict/openiddict-samples/tree/dev/samples/Hollastin
 // - https://github.com/openiddict/openiddict-samples/tree/dev/samples/Imynusoph
-public sealed class AuthorizationController : Controller
+public sealed class AuthorizationController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    : Controller
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public AuthorizationController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
-    {
-        _signInManager = signInManager;
-        _userManager = userManager;
-    }
-
     [HttpPost("~/connect/token")]
     [IgnoreAntiforgeryToken]
     [Produces("application/json")]
@@ -38,7 +29,18 @@ public sealed class AuthorizationController : Controller
         {
             if (request.IsPasswordGrantType())
             {
-                ApplicationUser? user = await _userManager.FindByNameAsync(request.Username);
+                if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+                {
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+
+                ApplicationUser? user = await userManager.FindByNameAsync(request.Username);
 
                 if (user == null)
                 {
@@ -52,7 +54,7 @@ public sealed class AuthorizationController : Controller
                 }
 
                 // Validate the username/password parameters and ensure the account is not locked out.
-                SignInResult? result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+                SignInResult result = await signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
                 if (!result.Succeeded)
                 {
@@ -70,23 +72,16 @@ public sealed class AuthorizationController : Controller
 
                 // Add the claims that will be persisted in the tokens.
                 identity
-                    .SetClaim(Claims.Subject, await _userManager.GetUserIdAsync(user))
-                    .SetClaim(Claims.Email, await _userManager.GetEmailAsync(user))
-                    .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
-                    .SetClaims(Claims.Role, (await _userManager.GetRolesAsync(user)).ToImmutableArray());
-
+                    .SetClaim(Claims.Subject, await userManager.GetUserIdAsync(user))
+                    .SetClaim(Claims.Email, await userManager.GetEmailAsync(user))
+                    .SetClaim(Claims.Name, await userManager.GetUserNameAsync(user))
+                    .SetClaims(Claims.Role, [.. await userManager.GetRolesAsync(user)]);
 
                 // Set the list of scopes granted to the client application.
                 // Note: the Ember client doesn't ask for any scopes, so we don't intersect with the requested scopes.
-                identity.SetScopes(new[]
-                {
-                    Scopes.OpenId,
-                    Scopes.Email,
-                    Scopes.Profile,
-                    Scopes.Roles,
+                identity.SetScopes(Scopes.OpenId, Scopes.Email, Scopes.Profile, Scopes.Roles,
                     // Send back a refresh token, despite the Ember client not asking for it.
-                    Scopes.OfflineAccess
-                });
+                    Scopes.OfflineAccess);
 
                 identity.SetDestinations(GetDestinations);
 
@@ -98,8 +93,20 @@ public sealed class AuthorizationController : Controller
                 // Retrieve the claims principal stored in the refresh token.
                 AuthenticateResult result = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
+                string? subject = result.Principal?.GetClaim(Claims.Subject);
+                if (subject == null)
+                {
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The refresh token is no longer valid."
+                    });
+
+                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                }
+
                 // Retrieve the user profile corresponding to the refresh token.
-                ApplicationUser? user = await _userManager.FindByIdAsync(result.Principal!.GetClaim(Claims.Subject));
+                ApplicationUser? user = await userManager.FindByIdAsync(subject);
 
                 if (user == null)
                 {
@@ -113,7 +120,7 @@ public sealed class AuthorizationController : Controller
                 }
 
                 // Ensure the user is still allowed to sign in.
-                if (!await _signInManager.CanSignInAsync(user))
+                if (!await signInManager.CanSignInAsync(user))
                 {
                     var properties = new AuthenticationProperties(new Dictionary<string, string?>
                     {
@@ -128,10 +135,10 @@ public sealed class AuthorizationController : Controller
 
                 // Override the user claims present in the principal in case they changed since the refresh token was issued.
                 identity
-                    .SetClaim(Claims.Subject, await _userManager.GetUserIdAsync(user))
-                    .SetClaim(Claims.Email, await _userManager.GetEmailAsync(user))
-                    .SetClaim(Claims.Name, await _userManager.GetUserNameAsync(user))
-                    .SetClaims(Claims.Role, (await _userManager.GetRolesAsync(user)).ToImmutableArray());
+                    .SetClaim(Claims.Subject, await userManager.GetUserIdAsync(user))
+                    .SetClaim(Claims.Email, await userManager.GetEmailAsync(user))
+                    .SetClaim(Claims.Name, await userManager.GetUserNameAsync(user))
+                    .SetClaims(Claims.Role, [.. await userManager.GetRolesAsync(user)]);
 
                 identity.SetDestinations(GetDestinations);
 

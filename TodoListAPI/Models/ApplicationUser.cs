@@ -11,7 +11,7 @@ public sealed class ApplicationUser : IdentityUser, IIdentifiable<string>
     public string? StringId
     {
         get => Id;
-        set => Id = value;
+        set => Id = value!;
     }
 
     [NotMapped]

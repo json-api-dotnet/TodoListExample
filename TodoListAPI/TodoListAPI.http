@@ -1,0 +1,94 @@
+@host = http://localhost:5000
+# Alternatively use HTTPS:
+# @host = https://localhost:44344
+
+@jsonApiContentType = application/vnd.api+json
+
+### Login as user guest (Password grant)
+# @name loginGuest
+POST {{host}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username=guest&password=Guest1!
+
+### Login as user john (Password grant)
+# @name loginJohn
+POST {{host}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username=john&password=P@ssw0rd!
+
+### Refresh access token
+# (Requires running 'loginGuest' above first)
+# @name refreshToken
+POST {{host}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{loginGuest.response.body.$.refresh_token}}
+
+### Get all todo-items for user guest
+# (Requires running 'loginGuest' above first)
+GET {{host}}/api/v1/todo-items
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+### Get all todo-items for user john
+# (Requires running 'loginJohn' above first)
+GET {{host}}/api/v1/todo-items
+Authorization: Bearer {{loginJohn.response.body.$.access_token}}
+
+### Get all todo-items with owner relationship included
+# (Requires running 'loginGuest' above first)
+GET {{host}}/api/v1/todo-items?include=owner
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+### Get single todo item by ID
+# (Requires running 'loginGuest' above first)
+GET {{host}}/api/v1/todo-items/1
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+### Create a new todo item
+# (Requires running 'loginGuest' above first)
+# @name createTodoItem
+POST {{host}}/api/v1/todo-items
+Content-Type: {{jsonApiContentType}}
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+{
+  "data": {
+    "type": "todo-items",
+    "attributes": {
+      "description": "owned-by-guest, something else"
+    }
+  }
+}
+
+### Update an existing todo item description
+# (Requires running 'loginGuest' above first)
+PATCH {{host}}/api/v1/todo-items/1
+Content-Type: {{jsonApiContentType}}
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+{
+  "data": {
+    "type": "todo-items",
+    "id": "1",
+    "attributes": {
+      "description": "owned-by-guest, updated"
+    }
+  }
+}
+
+### Delete the newly created todo item
+# (Requires running 'createTodoItem' above first.
+DELETE {{host}}{{createTodoItem.response.headers.Location}}
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+### Delete a todo item by ID
+# (Requires running 'loginGuest' above first)
+DELETE {{host}}/api/v1/todo-items/1
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}
+
+### Sort todo-items descending by id
+# (Requires running 'loginGuest' above first)
+GET {{host}}/api/v1/todo-items?sort=-id
+Authorization: Bearer {{loginGuest.response.body.$.access_token}}

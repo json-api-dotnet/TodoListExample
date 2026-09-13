@@ -8,7 +8,7 @@ import {
   waitFor,
   visit,
 } from '@ember/test-helpers';
-import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupMirage } from 'todo-list-client/tests/helpers/setup-mirage';
 import {
   authenticateSession,
   invalidateSession,
@@ -81,7 +81,7 @@ module('Acceptance | Login', (hooks) => {
       assert.strictEqual(
         find('.message').textContent,
         'Authentication failed',
-        'error message is displayed'
+        'error message is displayed',
       );
     });
 

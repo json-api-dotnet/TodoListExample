@@ -8,7 +8,7 @@ import {
   waitFor,
   visit,
 } from '@ember/test-helpers';
-import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupMirage } from 'todo-list-client/tests/helpers/setup-mirage';
 import {
   authenticateSession,
   invalidateSession,
@@ -37,7 +37,7 @@ module('Acceptance | S | Todo Items | Add', (hooks) => {
     assert.strictEqual(
       currentURL(),
       '/s/todo-items/add',
-      'the route is correct'
+      'the route is correct',
     );
 
     this.server.post('/api/v1/todo-items', ({ todoItems }, request) => {
@@ -79,14 +79,14 @@ module('Acceptance | S | Todo Items | Add', (hooks) => {
       assert.strictEqual(
         find('.message').textContent,
         "Description can't be blank ",
-        'error message is displayed'
+        'error message is displayed',
       );
     });
 
     assert.strictEqual(
       currentURL(),
       '/s/todo-items/add',
-      'stays on route after failed save'
+      'stays on route after failed save',
     );
   });
 
@@ -108,14 +108,14 @@ module('Acceptance | S | Todo Items | Add', (hooks) => {
       assert.strictEqual(
         find('.message').textContent,
         'Description is too short (minimum is 4 characters) ',
-        'error message is displayed'
+        'error message is displayed',
       );
     });
 
     assert.strictEqual(
       currentURL(),
       '/s/todo-items/add',
-      'stays on route after failed save'
+      'stays on route after failed save',
     );
   });
 });

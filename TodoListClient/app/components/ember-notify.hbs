@@ -1,0 +1,20 @@
+{{! template-lint-disable no-triple-curlies }}
+<div class="ember-notify-cn">
+  {{#each this.notify.messages as |message|}}
+    <div
+      class="ember-notify alert alert-{{message.type}}
+        alert-dismissible fade show"
+      role="alert"
+    >
+      <span class="message">{{#if
+          message.html
+        }}{{{message.html}}}{{else}}{{message.text}}{{/if}}</span>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        {{on "click" (fn this.close message)}}
+      ></button>
+    </div>
+  {{/each}}
+</div>

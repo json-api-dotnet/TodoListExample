@@ -1,0 +1,16 @@
+<h1>New Todo Item</h1>
+<form {{on "submit" this.save}}>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <input
+      data-test-description-input
+      id="description"
+      class="form-control"
+      placeholder="description"
+      value={{@changeset.description}}
+      {{on "input" this.updateDescription}}
+    />
+  </div>
+  <button data-test-submit class="btn btn-primary mb-3" type="submit">Add Todo
+    Item</button>
+</form>
