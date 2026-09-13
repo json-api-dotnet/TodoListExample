@@ -4,6 +4,4 @@ using OpenIddict.Validation.AspNetCore;
 namespace TodoListAPI.Controllers;
 
 [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
-public partial class TodoItemsController
-{
-}
+public partial class TodoItemsController;

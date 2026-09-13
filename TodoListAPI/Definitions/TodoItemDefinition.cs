@@ -7,21 +7,10 @@ using TodoListAPI.Models;
 
 namespace TodoListAPI.Definitions;
 
-public sealed class TodoItemDefinition : JsonApiResourceDefinition<TodoItem, long>
+public sealed class TodoItemDefinition(
+    IResourceGraph resourceGraph, IJsonApiRequest request, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+    : JsonApiResourceDefinition<TodoItem, long>(resourceGraph)
 {
-    private readonly IJsonApiRequest _request;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public TodoItemDefinition(IResourceGraph resourceGraph, IJsonApiRequest request, IHttpContextAccessor httpContextAccessor,
-        UserManager<ApplicationUser> userManager)
-        : base(resourceGraph)
-    {
-        _request = request;
-        _httpContextAccessor = httpContextAccessor;
-        _userManager = userManager;
-    }
-
     public override async Task OnPrepareWriteAsync(TodoItem todoItem, WriteOperationKind writeOperation, CancellationToken cancellationToken)
     {
         if (writeOperation == WriteOperationKind.CreateResource)
@@ -32,13 +21,13 @@ public sealed class TodoItemDefinition : JsonApiResourceDefinition<TodoItem, lon
 
     private async Task<ApplicationUser> GetCurrentUserAsync()
     {
-        string? userId = _httpContextAccessor.HttpContext?.User.GetClaim(OpenIddictConstants.Claims.Subject);
+        string? userId = httpContextAccessor.HttpContext?.User.GetClaim(OpenIddictConstants.Claims.Subject);
         if (userId == null)
         {
             throw new InvalidOperationException("Could not find current user.");
         }
 
-        ApplicationUser? user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser? user = await userManager.FindByIdAsync(userId);
 
         if (user == null)
         {
@@ -50,7 +39,7 @@ public sealed class TodoItemDefinition : JsonApiResourceDefinition<TodoItem, lon
 
     public override void OnDeserialize(TodoItem todoItem)
     {
-        if (_request.WriteOperation == WriteOperationKind.CreateResource)
+        if (request.WriteOperation == WriteOperationKind.CreateResource)
         {
             // Prevent ASP.NET ModelState validation error, because required Owner relationship was not sent.
             todoItem.Owner = new ApplicationUser();

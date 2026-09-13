@@ -6,33 +6,27 @@ using TodoListAPI.Models;
 
 namespace TodoListAPI.Data;
 
-public sealed class AppDbContext : IdentityDbContext<ApplicationUser>
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
+    : IdentityDbContext<ApplicationUser>(options)
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
-
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
-        : base(options)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<TodoItem>().HasQueryFilter(todoItem => !IsInHttpRequest() || todoItem.Owner.Id == GetCurrentUserId());
+        builder.Entity<TodoItem>()
+            .HasQueryFilter(todoItem => !IsInHttpRequest() || todoItem.Owner.Id == GetCurrentUserId());
     }
 
     private bool IsInHttpRequest()
     {
-        return _httpContextAccessor.HttpContext != null;
+        return httpContextAccessor.HttpContext != null;
     }
 
     private string GetCurrentUserId()
     {
-        Claim? claim = _httpContextAccessor.HttpContext?.User.FindFirst(OpenIddictConstants.Claims.Subject);
+        Claim? claim = httpContextAccessor.HttpContext?.User.FindFirst(OpenIddictConstants.Claims.Subject);
 
         if (claim != null)
         {
