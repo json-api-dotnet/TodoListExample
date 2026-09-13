@@ -1,57 +1,76 @@
-# todo-list-client
+# TodoListClient
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Ember.js front-end for the Todo List example application, demonstrating authentication with OpenIddict and JSON:API communication with JsonApiDotNetCore.
 
 ## Prerequisites
 
-You will need the following things properly installed on your computer.
+You will need the following installed on your computer:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/)
-- [Yarn](https://yarnpkg.com/)
-- [Ember CLI](https://cli.emberjs.com/release/)
-- [Google Chrome](https://google.com/chrome/)
+- [Node.js](https://nodejs.org/) (version `>= 20.19.0`) and npm
+- [Google Chrome](https://google.com/chrome/) (required for running tests)
 
 ## Installation
 
-- `git clone <repository-url>` this repository
-- `cd todo-list-client`
-- `yarn install`
+```shell
+cd TodoListClient
+npm install
+```
 
 ## Running / Development
 
-- `ember serve`
-- Visit your app at [http://localhost:4200](http://localhost:4200).
-- Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+Start the development server:
 
-### Code Generators
+```shell
+npm start
+```
 
-Make use of the many generators for code, try `ember help generate` for more details
+- Visit the application at [http://localhost:4200](http://localhost:4200).
+- Visit the in-browser tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
-### Running Tests
+## Running Tests
 
-- `ember test`
-- `ember test --server`
+From the `TodoListClient` directory:
 
-### Linting
+- Run all linters and tests:
+  ```shell
+  npm test
+  ```
+- Run only the Ember tests:
+  ```shell
+  npm run test:ember
+  ```
+- Run tests in interactive/server mode (re-runs on file changes):
+  ```shell
+  npx ember test --server
+  ```
 
-- `yarn lint`
-- `yarn lint:fix`
+## Linting & Formatting
 
-### Building
+- Check code style and linting (JavaScript, templates, CSS, Prettier):
+  ```shell
+  npm run lint
+  ```
+- Automatically fix lint and formatting issues:
+  ```shell
+  npm run lint:fix
+  ```
 
-- `ember build` (development)
-- `ember build --environment production` (production)
+## Building
 
-### Deploying
-
-Specify what it takes to deploy your app.
+- Development build:
+  ```shell
+  npx ember build
+  ```
+- Production build:
+  ```shell
+  npm run build
+  ```
 
 ## Further Reading / Useful Links
 
-- [ember.js](https://emberjs.com/)
-- [ember-cli](https://cli.emberjs.com/release/)
-- Development Browser Extensions
-  - [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  - [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+- [Ember.js](https://emberjs.com/)
+- [Ember CLI Guides](https://cli.emberjs.com/release/)
+- Development Browser Extensions:
+  - [Ember Inspector for Chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
+  - [Ember Inspector for Firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)

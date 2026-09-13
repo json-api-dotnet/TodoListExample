@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: ["master", "main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-api:
+    name: "Build API"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.*"
+      - name: Build .NET app
+        run: dotnet build TodoListAPI/TodoListAPI.slnx --warnaserror
+
+  lint-client:
+    name: "Lint Client"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: TodoListClient
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: TodoListClient/package-lock.json
+      - name: Install Dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+
+  test-client:
+    name: "Test Client"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: TodoListClient
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: TodoListClient/package-lock.json
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Tests
+        run: npm test

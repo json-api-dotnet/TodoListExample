@@ -76,35 +76,12 @@
   "engines": {
     "node": ">= 20.19.0"
   },
-  "overrides": {
-    "ansi-html": "0.0.9",
-    "ansi-regex": "^5.0.1",
-    "colord": "^2.9.4",
-    "diff": "^8.0.3",
-    "follow-redirects": "^1.16.0",
-    "picomatch": "^2.3.2",
-    "tmp": "^0.2.7",
-    "underscore": "^1.13.8",
-    "websocket-driver": "^0.7.5",
-    "ember-auto-import": {
-      "brace-expansion": "^1.1.18"
-    },
-    "ember-cli-babel": {
-      "brace-expansion": "^2.1.4"
-    }
-  },
-  "resolutions": {
-    "ansi-html": "0.0.9",
-    "ansi-regex": "^5.0.1",
-    "colord": "^2.9.4",
-    "diff": "^8.0.3",
-    "follow-redirects": "^1.16.0",
-    "picomatch": "^2.3.2",
-    "tmp": "^0.2.7",
-    "underscore": "^1.13.8",
-    "websocket-driver": "^0.7.5"
-  },
   "ember": {
     "edition": "octane"
+  },
+  "overrides": {
+    "ansi-html": "0.0.9",
+    "diff": "^8.0.3",
+    "tmp": "^0.2.7"
   }
 }
