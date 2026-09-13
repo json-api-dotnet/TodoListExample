@@ -1,0 +1,27 @@
+diff --git a/node_modules/@embroider/vite/dist/src/backchannel.js b/node_modules/@embroider/vite/dist/src/backchannel.js
+index 7e8b1d0..82f2fd0 100644
+--- a/node_modules/@embroider/vite/dist/src/backchannel.js
++++ b/node_modules/@embroider/vite/dist/src/backchannel.js
+@@ -60,6 +60,6 @@ export function writeStatus(specifier, fromFile, status) {
+     channel === null || channel === void 0 ? void 0 : channel.writeStatus(specifier, fromFile, status);
+ }
+ function stateKey(specifier, fromFile) {
+-    return `${specifier}\0${fromFile}`;
++    return `${specifier.replace(/\\/g, '/')}\0${fromFile ? fromFile.replace(/\\/g, '/') : ''}`;
+ }
+ //# sourceMappingURL=backchannel.js.map
+\ No newline at end of file
+diff --git a/node_modules/@embroider/vite/dist/src/resolver.js b/node_modules/@embroider/vite/dist/src/resolver.js
+index 78f9249..2112423 100644
+--- a/node_modules/@embroider/vite/dist/src/resolver.js
++++ b/node_modules/@embroider/vite/dist/src/resolver.js
+@@ -252,7 +252,7 @@ function buildViteJump(pkg) {
+     writeFileSync(join(tmp, 'package.json'), JSON.stringify({
+         name: 'jump-root',
+     }), { flush: true });
+-    ensureSymlinkSync(pkg.root, join(tmp, 'node_modules', pkg.name));
++    ensureSymlinkSync(pkg.root, join(tmp, 'node_modules', pkg.name), 'junction');
+     return tmp;
+ }
+ //# sourceMappingURL=resolver.js.map
+\ No newline at end of file

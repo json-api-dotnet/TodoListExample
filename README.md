@@ -9,7 +9,7 @@ Back in 2017, Jared Nance created an excellent [video series](https://www.youtub
 - [Part 4: Client Sessions](https://www.youtube.com/watch?v=CHdoya6rvaA&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=6)
 - [Part 5: Persisting Data](https://www.youtube.com/watch?v=bZ1D_aYGJnU&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf&index=7)
 
-This repository has since been updated to modern **.NET 10**, **Ember.js 6.12 LTS**, **Ember Data 5.3 LTS**, and **OpenIddict 7**.
+This repository has since been updated to modern **.NET 10**, **Ember.js 6.12 LTS** (built with **Embroider + Vite**), **Ember Data 5.3 LTS**, and **OpenIddict 7**.
 
 ---
 
@@ -110,11 +110,8 @@ From the `TodoListClient` directory:
   ```shell
   npm run test:ember
   ```
-- **Run Ember tests interactively (in-browser with auto-reload on file change):**
-  ```shell
-  npx ember test --server
-  ```
-  *(or visit [http://localhost:4200/tests](http://localhost:4200/tests) while `npm start` is running)*
+- **Run Ember tests interactively (in-browser with live reload):**
+  Start the dev server (`npm start`) and navigate to [http://localhost:4200/tests](http://localhost:4200/tests).
 - **Run code linters (ESLint, Prettier, Stylelint, Template-Lint):**
   ```shell
   npm run lint
@@ -123,12 +120,16 @@ From the `TodoListClient` directory:
   ```shell
   npm run lint:fix
   ```
+- **Build production assets:**
+  ```shell
+  npm run build
+  ```
 
 ---
 
 ## Updating Ember.js
 
-The client project uses standard npm packaging and configuration. To upgrade Ember dependencies in the future, use `npx ember-cli-update`:
+The client project uses standard npm packaging and is configured with Ember's modern Vite blueprint (`@ember/app-blueprint`). To upgrade Ember dependencies in the future, use `npx ember-cli-update`:
 
 1. Run the update tool:
    ```shell
@@ -147,9 +148,6 @@ The client project uses standard npm packaging and configuration. To upgrade Emb
    ```shell
    npm test
    ```
-
-> [!NOTE]
-> **Note regarding Ember 6.8+ blueprints:** Starting in Ember CLI 6.8, new Ember apps default to the modern Vite-based blueprint (`@ember/app-blueprint`). Existing classic build applications can continue to receive updates via the classic app blueprint (`@ember-tooling/classic-build-app-blueprint`) or migrate to Vite using `npx ember-vite-codemod`.
 
 ---
 

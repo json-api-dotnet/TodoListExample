@@ -13,9 +13,11 @@ const esmParserOptions = {
   ecmaVersion: "latest",
   requireConfigFile: false,
   babelOptions: {
+    configFile: false,
+    babelrc: false,
     plugins: [
       ["@babel/plugin-proposal-decorators", { legacy: true }],
-      ["@babel/plugin-proposal-class-properties", { loose: false }],
+      ["@babel/plugin-transform-class-properties", { loose: false }],
     ],
   },
 };
@@ -37,6 +39,7 @@ export default [
     files: ["**/*.js"],
     languageOptions: {
       parser: babelParser,
+      parserOptions: esmParserOptions,
     },
   },
   {
