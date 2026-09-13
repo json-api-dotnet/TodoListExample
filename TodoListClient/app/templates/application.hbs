@@ -1,7 +1,7 @@
 {{#if this.session.isAuthenticated}}
-<Navbar @invalidateSession={{this.invalidateSession}} />
+  <Navbar @invalidateSession={{this.invalidateSession}} />
 {{/if}}
 <div class="container">
-    {{outlet}}
-    <EmberNotify @messageStyle="bootstrap" />
+  {{outlet}}
+  <EmberNotify @messageStyle="bootstrap" />
 </div>

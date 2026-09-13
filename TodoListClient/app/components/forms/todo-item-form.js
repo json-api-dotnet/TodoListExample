@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class TodoItemForm extends Component {
   @service notify;
@@ -26,7 +26,7 @@ export default class TodoItemForm extends Component {
           .reduce((accumulator, currentValue) => accumulator + currentValue);
         this.notify.error({ html: errors });
       }
-    } catch (error) {
+    } catch {
       this.notify.error('Failed to create item');
     }
   }

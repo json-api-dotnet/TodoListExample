@@ -5,16 +5,8 @@ const { setConfig } = require('@warp-drive/build-config');
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
-    'ember-bootstrap': {
-      bootstrapVersion: 5,
-      importBootstrapCSS: false,
-      insertEmberWormholeElementToDom: false,
-    },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
-    },
-    'ember-test-selectors': {
-      strip: false,
     },
   });
 

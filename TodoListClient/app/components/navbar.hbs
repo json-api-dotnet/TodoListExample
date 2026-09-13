@@ -1,10 +1,15 @@
 <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <span class="navbar-brand">
-            Todo List Client
-        </span>
-        <div class="d-flex">
-            <a data-test-logout href="#" {{on "click" @invalidateSession}} class="btn btn-outline-primary">Logout</a>
-        </div>
+  <div class="container-fluid">
+    <span class="navbar-brand">
+      Todo List Client
+    </span>
+    <div class="d-flex">
+      <a
+        data-test-logout
+        href="#"
+        {{on "click" @invalidateSession}}
+        class="btn btn-outline-primary"
+      >Logout</a>
     </div>
+  </div>
 </nav>

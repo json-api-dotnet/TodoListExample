@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class LoginForm extends Component {
@@ -31,7 +31,7 @@ export default class LoginForm extends Component {
         this.password,
       );
       this.router.transitionTo('s.todo-items');
-    } catch (error) {
+    } catch {
       this.notify.error('Authentication failed');
     }
   }

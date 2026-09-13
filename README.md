@@ -13,66 +13,70 @@ Back in 2017, Jared Nance did an excellent [video series](https://www.youtube.co
 
 ### Start the database
 
-The app requires running postgres instance with credentials specified in appsettings.json.
-One way to do this is run the database in a Docker container:
+The app requires a running PostgreSQL instance with credentials specified in `appsettings.json`.
+One way to do this is to run the database in a Docker container:
 
-```sh
-docker run --name TodoListSampleDb \
-    -e POSTGRES_USER=postgres \
-    -e POSTGRES_PASSWORD=postgres \
-    -e POSTGRES_DB=TodoList \
-    -p 5432:5432 \
-    -d postgres
+```shell
+docker run --name TodoListSampleDb -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=TodoList -p 5432:5432 -d postgres
 ```
 
 ### Starting the API
 
-- Switch directory
+- Switch directory:
   - `cd TodoListAPI`
-- Set the environment to development (mac)
-  - `export ASPNETCORE_ENVIRONMENT=development`
-- Start the server
+- Set the ASP.NET environment to Development:
+  - PowerShell (Windows): `$env:ASPNETCORE_ENVIRONMENT="Development"`
+  - Bash (Linux / macOS): `export ASPNETCORE_ENVIRONMENT=Development`
+- Start the server:
   - `dotnet run`
+
+The API will run on `http://localhost:5000/`.
 
 ### Starting the Client
 
-- Switch directory
+The client is built with Ember.js and requires Node.js.
+
+- Switch directory:
   - `cd TodoListClient`
 
-- Install ember-cli
-  - `npm install -g ember-cli`
+- Restore packages:
+  - `npm install` (or `yarn install`)
 
-- Restore packages
-  - `npm install -g yarn`
-  - `yarn install`
+- Start the client:
+  - `npm start` (or `ember serve`)
 
-- Start the client
-  - `yarn start`
-  or
-  - `ember s` 
-  
-- Open http://localhost:4200/ in your browser
+- Open [http://localhost:4200/](http://localhost:4200/) in your browser.
 
-In case you haven't watched the videos: the default username/password is `guest`/`Guest1!`.
+In case you haven't watched the videos, the default username/password is `guest`/`Guest1!`.
 
-## Running Client Tests
+## Running Client Tests and Linting
 
-* `ember test`
-* `ember test --server`
+From the `TodoListClient` directory:
+
+- Run all linters and tests:
+  - `npm test`
+- Run only Ember tests:
+  - `npm run test:ember` (or `ember test`)
+- Run Ember tests in interactive/server mode:
+  - `ember test --server`
+- Run code linters:
+  - `npm run lint`
+- Automatically fix lint and format issues:
+  - `npm run lint:fix`
 
 ## Updating to the latest version of Ember
 
-Usually the following commands are sufficient
+Usually the following commands are sufficient:
 - `npm install -g ember-cli-update`
 - `ember-cli-update`
 - `ember-cli-update --run-codemods`
-- `yarn install`
+- `npm install`
 
 ### Testing if everything still works
-- application starts and displays login link
+- application starts and displays login form
 - login with invalid username/password shows popup
 - login with correct username/password shows single todo-item "owned-by-guest"
-- input validation: adding a todo-item with less than 4 characters is not possible
+- input validation: adding a todo-item with fewer than 4 characters displays a validation error
 - after adding a todo-item, you're taken back to the list, which includes the new item
 - clicking logout takes you back to the login page
-- navigating to http://localhost:4200/s/todo-items when logged out takes you to the login page
+- navigating to [http://localhost:4200/s/todo-items](http://localhost:4200/s/todo-items) when logged out redirects to the login page

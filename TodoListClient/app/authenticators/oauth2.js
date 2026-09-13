@@ -2,5 +2,6 @@ import OAuth2PasswordGrant from 'ember-simple-auth/authenticators/oauth2-passwor
 import ENV from 'todo-list-client/config/environment';
 
 export default class OAuth2Authenticator extends OAuth2PasswordGrant {
+  static id = 'oauth2';
   serverTokenEndpoint = `${ENV.APP.host}/${ENV.APP.tokenPath}`;
 }
