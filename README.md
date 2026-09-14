@@ -1,5 +1,7 @@
 # JsonApiDotNetCore Todo List Example
 
+[![Build](https://github.com/json-api-dotnet/TodoListExample/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/json-api-dotnet/TodoListExample/actions/workflows/ci.yml?query=branch%3Amaster)
+
 A full-stack sample application demonstrating how [Ember.js](https://emberjs.com/) and [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet) work together seamlessly using [OpenIddict](https://documentation.openiddict.com/) for authentication and token refresh, and [JsonApiDotNetCore](https://github.com/json-api-dotnet/JsonApiDotNetCore/) for full [JSON:API](https://jsonapi.org/) specification compliance.
 
 Back in 2017, Jared Nance created an excellent [video series](https://www.youtube.com/watch?v=KAMuo6K7VcE&list=PLu4Bq53iqJJAo1RF0TY4Q5qCG7n9AqSZf) building the initial version of this demo:
