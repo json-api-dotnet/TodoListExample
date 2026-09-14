@@ -42,6 +42,10 @@ From the `TodoListClient` directory:
   ```
 - Run tests interactively in the browser:
   Start the dev server (`npm start`) and navigate to [http://localhost:4200/tests](http://localhost:4200/tests).
+- Run end-to-end tests against the real API (requires PostgreSQL running in Docker):
+  ```shell
+  npm run test:e2e
+  ```
 
 ## Linting & Formatting
 

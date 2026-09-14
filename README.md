@@ -42,14 +42,24 @@ When the API runs for the first time, it automatically creates the PostgreSQL da
 
 ### 1. Start the Database
 
-The application expects a PostgreSQL instance with the connection details defined in `TodoListAPI/appsettings.json`. The easiest way to start one is using Docker:
+The application expects a PostgreSQL instance with the connection details defined in `TodoListAPI/appsettings.json`. You can start it using Docker Compose:
 
 ```shell
-docker run --name TodoListSampleDb -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=TodoList -p 5432:5432 -d postgres
+docker compose up --detach --wait
 ```
 
+- This starts a PostgreSQL database container and a **pgAdmin** container (accessible at [http://localhost:5050](http://localhost:5050), preconfigured to automatically connect to the database).
+- To stop the containers:
+  ```shell
+  docker compose down
+  ```
+- To stop the containers and remove persistent data (reset the database):
+  ```shell
+  docker compose down --volumes
+  ```
+
 > [!NOTE]
-> The API will automatically create database tables and seed the demo users and todo-items on its first run. If you ever want a fresh database, stop and remove the container.
+> The API will automatically create database tables and seed the demo users and todo-items on its first run.
 
 ### 2. Start the API
 
@@ -127,6 +137,39 @@ From the `TodoListClient` directory:
 
 ---
 
+## Running End-to-End (E2E) Tests
+
+The repository includes an end-to-end test suite built with [Playwright](https://playwright.dev/) that validates the entire stack against the real PostgreSQL database, ASP.NET Core API server, and Ember.js client app.
+
+### Running E2E Tests Locally (using Docker)
+
+1. **Start the database in Docker:**
+   ```shell
+   docker compose up --detach --wait
+   ```
+
+2. **From the `TodoListClient` directory, install browsers (one-time setup):**
+   ```shell
+   cd TodoListClient
+   npx playwright install chromium
+   ```
+
+3. **Run the tests:**
+   ```shell
+   npm run test:e2e
+   ```
+
+> [!TIP]
+> **Automatic Server Management:** If the backend API (`dotnet run`) and frontend client (`npm start`) are already running, Playwright reuses them automatically. If they are not running, Playwright launches them in the background, runs the test suite, and shuts them down upon completion.
+
+You can also run tests interactively with the Playwright UI runner:
+
+```shell
+npx playwright test --ui
+```
+
+---
+
 ## Updating Ember.js
 
 The client project uses standard npm packaging and is configured with Ember's modern Vite blueprint (`@ember/app-blueprint`). To upgrade Ember dependencies in the future, use `npx ember-cli-update`:
@@ -148,18 +191,3 @@ The client project uses standard npm packaging and is configured with Ember's mo
    ```shell
    npm test
    ```
-
----
-
-## Manual Verification Checklist
-
-When verifying changes or following an upgrade, check that:
-
-- [ ] Application loads at [http://localhost:4200](http://localhost:4200) and displays the sign-in form.
-- [ ] Attempting to log in with invalid credentials displays an `"Authentication failed"` alert.
-- [ ] Logging in as `guest` (`Guest1!`) displays the todo list containing `"owned-by-guest"`.
-- [ ] Logging in as `john` (`P@ssw0rd!`) displays the todo list containing `"owned-by-john"`.
-- [ ] Input validation: Attempting to save a todo-item with fewer than 4 characters displays a validation error.
-- [ ] Adding a valid todo-item saves successfully and navigates back to the updated list.
-- [ ] Clicking **Logout** invalidates the session and returns to the login screen.
-- [ ] Navigating directly to a protected route (e.g. [http://localhost:4200/s/todo-items](http://localhost:4200/s/todo-items)) while logged out redirects to the login screen.
