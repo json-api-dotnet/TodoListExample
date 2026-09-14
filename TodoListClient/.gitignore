@@ -19,6 +19,8 @@
 /npm-debug.log*
 /testem.log
 /yarn-error.log
+/test-results/
+/playwright-report/
 
 # ember-try
 /.node_modules.ember-try/
