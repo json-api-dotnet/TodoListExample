@@ -105,7 +105,7 @@ if (builder.Environment.IsDevelopment())
 {
     app.UseCors(policy =>
     {
-        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        policy.WithOrigins("http://localhost:5000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     });
 }
 
