@@ -3,6 +3,7 @@ using JsonApiDotNetCore.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using OpenIddict.EntityFrameworkCore.Models;
 using TodoListAPI.Data;
 using TodoListAPI.Models;
 
@@ -43,7 +44,20 @@ builder.Services.AddJsonApi<AppDbContext>(options =>
     options.IncludeExceptionStackTraceInErrors = true;
     options.IncludeRequestBodyInErrors = true;
 #endif
-}, discovery => discovery.AddCurrentAssembly());
+}, discovery => discovery.AddCurrentAssembly(), resourceGraphBuilder =>
+{
+    resourceGraphBuilder
+        .SuppressWarningNotIdentifiable<IdentityRole>()
+        .SuppressWarningNotIdentifiable<IdentityRoleClaim<string>>()
+        .SuppressWarningNotIdentifiable<IdentityUserClaim<string>>()
+        .SuppressWarningNotIdentifiable<IdentityUserLogin<string>>()
+        .SuppressWarningNotIdentifiable<IdentityUserRole<string>>()
+        .SuppressWarningNotIdentifiable<IdentityUserToken<string>>()
+        .SuppressWarningNotIdentifiable<OpenIddictEntityFrameworkCoreApplication>()
+        .SuppressWarningNotIdentifiable<OpenIddictEntityFrameworkCoreAuthorization>()
+        .SuppressWarningNotIdentifiable<OpenIddictEntityFrameworkCoreScope>()
+        .SuppressWarningNotIdentifiable<OpenIddictEntityFrameworkCoreToken>();
+});
 
 // Register the Identity services.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()

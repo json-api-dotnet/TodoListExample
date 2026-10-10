@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using OpenIddict.Abstractions;
 using TodoListAPI.Models;
 
@@ -17,6 +18,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, IHttpCo
 
         builder.Entity<TodoItem>()
             .HasQueryFilter(todoItem => !IsInHttpRequest() || todoItem.Owner.Id == GetCurrentUserId());
+
+        AdjustDeleteBehaviorForJsonApi(builder);
     }
 
     private bool IsInHttpRequest()
@@ -34,5 +37,22 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options, IHttpCo
         }
 
         throw new InvalidOperationException("Could not find current user.");
+    }
+
+    private static void AdjustDeleteBehaviorForJsonApi(ModelBuilder builder)
+    {
+        foreach (IMutableForeignKey foreignKey in builder.Model.GetEntityTypes()
+            .SelectMany(entityType => entityType.GetForeignKeys()))
+        {
+            if (foreignKey.DeleteBehavior == DeleteBehavior.ClientSetNull)
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.SetNull;
+            }
+
+            if (foreignKey.DeleteBehavior == DeleteBehavior.ClientCascade)
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
+            }
+        }
     }
 }
