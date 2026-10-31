@@ -14,6 +14,8 @@ updates:
     groups:
       nuget-minor-patch:
         update-types: ["minor", "patch"]
+      nuget-major:
+        update-types: ["major"]
     labels: ["dependencies", "nuget"]
 
   # Ember client (npm)
@@ -29,6 +31,8 @@ updates:
     groups:
       npm-minor-patch:
         update-types: ["minor", "patch"]
+      npm-major:
+        update-types: ["major"]
     # TEMPORARY: Babel 8 major updates are blocked.
     # Babel 8 (@babel/core and its plugins) cannot be installed yet, because @rollup/plugin-babel (used in
     # vite.config.mjs) only supports @babel/core ^7 (latest release at the time of writing: 7.1.0). Updating
