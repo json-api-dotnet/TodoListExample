@@ -29,6 +29,18 @@ updates:
     groups:
       npm-minor-patch:
         update-types: ["minor", "patch"]
+    # TEMPORARY: Babel 8 major updates are blocked.
+    # Babel 8 (@babel/core and its plugins) cannot be installed yet, because @rollup/plugin-babel (used in
+    # vite.config.mjs) only supports @babel/core ^7 (latest release at the time of writing: 7.1.0). Updating
+    # @babel/core to 8.x fails `npm ci` with an ERESOLVE peer-dependency conflict (see closed PR #48), and the
+    # 8.x releases of @babel/eslint-parser, @babel/plugin-proposal-decorators and
+    # @babel/plugin-transform-runtime require @babel/core 8, so they would fail the same way.
+    # Minor and patch updates for @babel/* are still proposed.
+    # REMOVE this rule when @rollup/plugin-babel publishes a release that supports @babel/core ^8
+    # (check: npm view @rollup/plugin-babel peerDependencies). Then migrate all @babel/* packages in one change.
+    ignore:
+      - dependency-name: "@babel/*"
+        update-types: ["version-update:semver-major"]
     labels: ["dependencies", "npm"]
 
   # GitHub Actions used in .github/workflows
