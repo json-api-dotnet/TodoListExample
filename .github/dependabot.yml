@@ -1,0 +1,47 @@
+version: 2
+
+updates:
+  # .NET web API (NuGet)
+  - package-ecosystem: "nuget"
+    directory: "/TodoListAPI"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    pull-request-branch-name:
+      separator: "-"
+    cooldown:
+      default-days: 3
+    groups:
+      nuget-minor-patch:
+        update-types: ["minor", "patch"]
+    labels: ["dependencies", "nuget"]
+
+  # Ember client (npm)
+  - package-ecosystem: "npm"
+    directory: "/TodoListClient"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    pull-request-branch-name:
+      separator: "-"
+    cooldown:
+      default-days: 3
+    groups:
+      npm-minor-patch:
+        update-types: ["minor", "patch"]
+    labels: ["dependencies", "npm"]
+
+  # GitHub Actions used in .github/workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    pull-request-branch-name:
+      separator: "-"
+    cooldown:
+      default-days: 3
+    groups:
+      github-actions:
+        patterns: ["*"]
+    labels: ["dependencies", "github-actions"]
