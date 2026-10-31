@@ -47,7 +47,7 @@
     "@glimmer/tracking": "^1.1.2",
     "@playwright/test": "^1.63.0",
     "@rollup/plugin-babel": "^7.0.0",
-    "@warp-drive/build-config": "^0.0.3",
+    "@warp-drive/build-config": "^5.9.1",
     "babel-plugin-ember-template-compilation": "^3.1.0",
     "bootstrap": "^5.3.3",
     "concurrently": "^9.2.5",
